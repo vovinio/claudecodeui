@@ -236,6 +236,12 @@ export default function ChatComposer({
     : sendByCtrlEnter
       ? t('input.hintText.ctrlEnter')
       : t('input.hintText.enter');
+  // The hint is rendered part by part so CSS can reveal as many as the footer
+  // has room for, instead of letting the whole string run under the tool buttons.
+  const hintParts = useMemo(
+    () => submitHint.split('•').map((part) => part.trim()).filter(Boolean),
+    [submitHint],
+  );
   const submitAriaLabel = canQueueDraft
     ? hasQueuedDraft
       ? t('input.queue.update', { defaultValue: 'Update queued message' })
@@ -379,8 +385,8 @@ export default function ChatComposer({
             />
         </PromptInputBody>
 
-        <PromptInputFooter>
-          <PromptInputTools className="min-w-0">
+        <PromptInputFooter className="composer-footer gap-2">
+          <PromptInputTools className="shrink-0">
             <PromptInputButton
               tooltip={{ content: t('input.attachFiles') }}
               onClick={openAttachmentPicker}
@@ -422,15 +428,19 @@ export default function ChatComposer({
 
           </PromptInputTools>
 
-          <div className="flex shrink-0 items-center gap-1.5 sm:gap-2">
-            <div
-              className={`hidden text-xs text-muted-foreground/50 transition-opacity duration-200 lg:block ${
-                input.trim() && !canQueueDraft ? 'opacity-0' : 'opacity-100'
-              }`}
-            >
-              {submitHint}
-            </div>
+          <div
+            className={`composer-footer-hint min-w-0 flex-1 truncate text-right text-xs text-muted-foreground/50 transition-opacity duration-200 ${
+              input.trim() && !canQueueDraft ? 'opacity-0' : 'opacity-100'
+            }`}
+          >
+            {hintParts.map((part, index) => (
+              <span key={part} className="composer-footer-hint-part" data-hint-part={index}>
+                {part}
+              </span>
+            ))}
+          </div>
 
+          <div className="flex shrink-0 items-center gap-1.5 sm:gap-2">
             <ComposerModelMenu
               effort={effort}
               effortOptions={availableEffortOptions}

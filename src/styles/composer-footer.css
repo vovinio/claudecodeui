@@ -1,0 +1,52 @@
+/*
+ * Composer footer layout.
+ *
+ * The footer has fixed-size controls on both ends (attach, voice, tokens,
+ * commands on the left; model, permission mode, send on the right) and a
+ * keyboard hint between them. The hint is the only part that can be given up,
+ * so it shrinks and truncates while the controls keep their size.
+ *
+ * How much room the hint gets depends on the footer, not the window: the
+ * composer is capped at 54.25rem however wide the screen is, so a viewport
+ * breakpoint would happily show the full hint in a footer with no space for it
+ * — which is how it ended up drawn over the token badge. Container queries ask
+ * the right question. Parts are revealed one at a time, most useful first, and
+ * the thresholds are the width of the controls plus each part's own text.
+ */
+
+.composer-footer {
+  container-type: inline-size;
+  container-name: composer-footer;
+}
+
+.composer-footer-hint-part {
+  display: none;
+}
+
+.composer-footer-hint-part:not(:first-child)::before {
+  content: ' • ';
+}
+
+@container composer-footer (min-width: 41rem) {
+  .composer-footer-hint-part[data-hint-part='0'] {
+    display: inline;
+  }
+}
+
+@container composer-footer (min-width: 50rem) {
+  .composer-footer-hint-part[data-hint-part='1'] {
+    display: inline;
+  }
+}
+
+@container composer-footer (min-width: 58rem) {
+  .composer-footer-hint-part[data-hint-part='2'] {
+    display: inline;
+  }
+}
+
+@container composer-footer (min-width: 66rem) {
+  .composer-footer-hint-part[data-hint-part='3'] {
+    display: inline;
+  }
+}
