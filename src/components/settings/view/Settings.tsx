@@ -70,6 +70,23 @@ function Settings({ isOpen, onClose, projects = [], initialTab = 'agents' }: Set
     unsubscribe: pushUnsubscribe,
   } = useWebPush();
 
+  // Escape closes the dialog. Skipped while the provider login modal is up: it
+  // hosts a terminal that takes Escape as input, and it has its own close button.
+  useEffect(() => {
+    if (!isOpen || showLoginModal) return undefined;
+
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === 'Escape' && !event.defaultPrevented) {
+        onClose();
+      }
+    };
+
+    document.addEventListener('keydown', handleKeyDown);
+    return () => {
+      document.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [isOpen, showLoginModal, onClose]);
+
   const handleEnablePush = async () => {
     await pushSubscribe();
     // Server sets webPush: true in preferences on subscribe; sync local state
