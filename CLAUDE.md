@@ -72,9 +72,16 @@ sudo systemctl start cloudcli     # back to the installed build
 ## Shipping to production
 
 Production is the globally installed `@cloudcli-ai/cloudcli` package, run by
-`cloudcli.service` as `dev`. Build from `main`, and run it from a terminal —
-`systemctl restart cloudcli` drops every WebSocket including the session issuing
-it.
+`cloudcli.service` as `dev`.
+
+`dev` has passwordless sudo for this one script (`/etc/sudoers.d/promote`), so
+no root login is needed and an agent can run it.
+
+**Agents: warn before you run it, then expect to be disconnected.** The restart
+drops every WebSocket including your own session. The promote itself survives —
+it detaches — but you will not see it finish. Say what you are about to do, run
+it, and let the operator read the log. Prefer `--dry-run` when you only need to
+know that it builds.
 
 ```bash
 sudo scripts/promote.sh              # build main, install, restart, verify
