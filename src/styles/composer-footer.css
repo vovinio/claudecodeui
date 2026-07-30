@@ -23,10 +23,6 @@
   display: none;
 }
 
-.composer-footer-hint-part:not(:first-child)::before {
-  content: ' • ';
-}
-
 @container composer-footer (min-width: 41rem) {
   .composer-footer-hint-part[data-hint-part='0'] {
     display: inline;

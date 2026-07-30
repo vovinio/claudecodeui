@@ -435,7 +435,7 @@ export default function ChatComposer({
           >
             {hintParts.map((part, index) => (
               <span key={part} className="composer-footer-hint-part" data-hint-part={index}>
-                {part}
+                {index > 0 ? ` • ${part}` : part}
               </span>
             ))}
           </div>
