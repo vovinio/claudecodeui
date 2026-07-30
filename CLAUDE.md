@@ -4,8 +4,13 @@ This repo started as a clone of `siteboon/claudecodeui` (AGPL-3.0) and is now
 **ours to develop**. We do not track upstream any more. `origin` is
 `vovinio/claudecodeui`; `main` is our version and the branch we ship from.
 
-This file is local-only — listed in `.git/info/exclude`, so it never shows up in
-`git status`. Do not add or edit `AGENTS.md` here: that file came from upstream.
+Every file here is ours, inherited ones included. `AGENTS.md` came from the
+original clone, but the fork is frozen — there are no upstream merges left to
+conflict with, so edit anything that is useful to edit.
+
+This file is committed (force-added: upstream's `.gitignore` lists `CLAUDE.md`
+for contributors' local notes, which no longer applies to us) so it is backed up
+on GitHub with the code rather than living only on this disk.
 
 ## Workflow
 
