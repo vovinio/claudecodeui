@@ -77,15 +77,20 @@ Production is the globally installed `@cloudcli-ai/cloudcli` package, run by
 it.
 
 ```bash
-git worktree add --detach /tmp/ccui-build main
-cd /tmp/ccui-build && npm ci && npm run build && npm pack
-sudo npm i -g cloudcli-ai-cloudcli-*.tgz
-sudo systemctl restart cloudcli
+sudo scripts/promote.sh              # build main, install, restart, verify
+sudo scripts/promote.sh --dry-run    # build and pack only, change nothing
+sudo scripts/promote.sh --rollback   # reinstall the previous build
 ```
 
-Keep the previous `.tgz` — rollback is one `npm i -g` away. Reinstalling
-`@cloudcli-ai/cloudcli` from the npm registry instead would silently drop
-everything we have added.
+It detaches itself, so it finishes even though the restart kills the calling
+session, and it prints a log path to follow. It builds from a throwaway worktree
+of `main`, so an in-progress edit can never leak into production. Every build is
+kept in `/var/backups/cloudcli/`, stamped with its commit — that is what
+`--rollback` reinstalls. If the new build does not answer within 60s it rolls
+back on its own.
+
+Never recover by reinstalling `@cloudcli-ai/cloudcli` from the npm registry:
+that is upstream's build and would silently drop everything we have added.
 
 ## UI changes
 
